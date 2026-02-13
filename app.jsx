@@ -476,6 +476,8 @@ function App() {
       ? "Gagal memuat data"
       : "Data referensi siap";
 
+  const statusClass = loading ? "loading" : error ? "error" : "success";
+
   const canvasFallbacks = [
     "Tinggi vs Umur",
     "Berat vs Umur",
@@ -521,7 +523,7 @@ function App() {
               Kelola interpretasi pertumbuhan anak dan pantau status gizi secara real-time.
             </p>
           </div>
-          <span className="main__status">
+          <span className={`main__status ${statusClass}`}>
             <span aria-hidden="true">●</span>
             {statusMessage}
           </span>

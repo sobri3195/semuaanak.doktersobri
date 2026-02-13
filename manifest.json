@@ -1,0 +1,24 @@
+{
+  "name": "Growth Insights Admin",
+  "short_name": "Growth Insights",
+  "description": "Aplikasi analisis pertumbuhan dan status gizi anak berdasarkan standar WHO/CDC",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "128x128",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "health",
+    "medical",
+    "education"
+  ],
+  "lang": "id"
+}

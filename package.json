@@ -1,0 +1,27 @@
+{
+  "name": "growth-insights-admin",
+  "version": "1.0.0",
+  "description": "Single-page web application untuk analisis pertumbuhan dan status gizi anak berdasarkan standar WHO/CDC",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve . -p 8000",
+    "dev": "npx serve . -p 8000 -o",
+    "deploy": "vercel",
+    "deploy:prod": "vercel --prod"
+  },
+  "keywords": [
+    "growth",
+    "who",
+    "cdc",
+    "child-development",
+    "pediatric",
+    "health",
+    "z-score",
+    "growth-chart"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
