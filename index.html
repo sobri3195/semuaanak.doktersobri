@@ -3,12 +3,33 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- DNS Prefetch & Preconnect for Performance -->
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="dns-prefetch" href="https://unpkg.com" crossorigin>
+    
+    <meta name="description" content="Aplikasi analisis pertumbuhan dan status gizi anak berdasarkan standar WHO/CDC. Hitung z-scores, percentiles, dan interpretasi status gizi untuk anak usia 0-120 bulan." />
+    <meta name="keywords" content="growth, who, cdc, child development, pediatric, health, z-score, growth chart, pertumbuhan anak, status gizi" />
+    <meta name="author" content="Growth Insights Team" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Growth Insights Admin" />
+    <meta property="og:description" content="Aplikasi analisis pertumbuhan dan status gizi anak berdasarkan standar WHO/CDC" />
+    <meta property="og:image" content="/favicon.svg" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Growth Insights Admin" />
+    <meta name="twitter:description" content="Aplikasi analisis pertumbuhan dan status gizi anak berdasarkan standar WHO/CDC" />
+    
     <title>Growth Insights Admin</title>
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%232563eb'/%3E%3Cpath d='M18 36l10-10 6 6 12-12' stroke='%23fff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E"
-    />
+    
+    <!-- Favicon & PWA -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
@@ -16,6 +37,56 @@
       :root {
         color-scheme: light;
         font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        scroll-behavior: smooth;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: rgba(15, 23, 42, 0.05);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: rgba(148, 163, 184, 0.4);
+        border-radius: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(148, 163, 184, 0.6);
+      }
+
+      /* Fade-in Animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .main {
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      .panel,
+      .card {
+        animation: fadeIn 0.6s ease-out;
+      }
+
+      .panel:nth-child(2),
+      .card:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+
+      .panel:nth-child(3),
+      .card:nth-child(3) {
+        animation-delay: 0.2s;
       }
 
       * {
@@ -92,13 +163,34 @@
         color: inherit;
         text-decoration: none;
         font-size: 15px;
-        transition: background 0.2s ease, transform 0.2s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .sidebar__link::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        background: linear-gradient(180deg, #60a5fa, #2563eb);
+        border-radius: 0 3px 3px 0;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .sidebar__link.active::before,
+      .sidebar__link:hover::before {
+        opacity: 1;
       }
 
       .sidebar__link.active,
       .sidebar__link:hover {
         background: rgba(148, 163, 184, 0.16);
         transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
 
       .sidebar__link-indicator {
@@ -157,6 +249,30 @@
         border-radius: 999px;
         font-size: 13px;
         font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .main__status.loading span {
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+
+      .main__status.success {
+        background: rgba(34, 197, 94, 0.12);
+        color: #16a34a;
+      }
+
+      .main__status.error {
+        background: rgba(239, 68, 68, 0.12);
+        color: #dc2626;
       }
 
       .workspace {
@@ -175,6 +291,13 @@
         display: flex;
         flex-direction: column;
         gap: 24px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(148, 163, 184, 0.08);
+      }
+
+      .panel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
       }
 
       .panel__title {
@@ -272,6 +395,31 @@
         flex-direction: column;
         gap: 16px;
         border: 1px solid rgba(148, 163, 184, 0.12);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #60a5fa, #2563eb);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 24px 50px rgba(15, 23, 42, 0.15);
+        border-color: rgba(37, 99, 235, 0.2);
+      }
+
+      .card:hover::before {
+        opacity: 1;
       }
 
       .card h3 {
